@@ -1,4 +1,5 @@
 import { BalanceResponse } from '../models/Balance'
+import { FeatureFlags } from '../models/FeatureFlags'
 import {
     ICreditCardMultisigWallet,
     IGeneralMultisigWallet
@@ -182,5 +183,13 @@ export class MerapiClient {
 
     getTokenInfo = async (tokenAddress: string): Promise<ITokenInfo | null> => {
         return this.http.get(`/wallet/blockchain/${tokenAddress}/token-info`)
+    }
+
+    getFeatureFlags = async (): Promise<FeatureFlags> => {
+        // TOOD: remove mock
+        return {
+            multisignatureWallet: true,
+            paymentWallet: true,
+        }
     }
 }

@@ -26,3 +26,4 @@ export { Account, HDWallet } from './models/Wallet'
 
 export { DoraApiClient } from './data/DoraApiClient'
 export { MerapiClient } from './data/MerapiClient'
+export { FeatureFlags } from './models/FeatureFlags'
