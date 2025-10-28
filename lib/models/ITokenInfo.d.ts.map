@@ -1,0 +1,1 @@
+{"version":3,"file":"ITokenInfo.d.ts","sourceRoot":"","sources":["../../src/models/ITokenInfo.ts"],"names":[],"mappings":"AAAA,MAAM,WAAW,UAAU;IACvB,YAAY,EAAE,MAAM,GAAG,IAAI,CAAA;IAC3B,QAAQ,EAAE,MAAM,CAAA;IAChB,KAAK,EAAE;QACH,IAAI,EAAE,MAAM,CAAA;QACZ,QAAQ,EAAE,MAAM,CAAA;QAChB,MAAM,EAAE,MAAM,CAAA;KACjB,CAAA;CACJ"}
