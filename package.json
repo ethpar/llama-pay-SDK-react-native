@@ -11,9 +11,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/ethpar/llama-pay-SDK-react-native"
+    "url": "git+https://github.com/ethpar/llama-pay-SDK-react-native.git"
   },
-  "keywords": ["ethpar", "llama-pay"],
+  "keywords": [
+    "ethpar",
+    "llama-pay"
+  ],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
