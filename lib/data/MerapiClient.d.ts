@@ -12,6 +12,7 @@ type AuthTokenProvider = () => Promise<string | null>;
 export declare class MerapiClient {
     http: HttpClient;
     headers: Headers;
+    afterRequestCallback?: (responseBody: any, req: globalThis.Response) => void | Promise<void>;
     authTokenProvider?: AuthTokenProvider;
     constructor(baseUrl: string);
     setAuthTokenProvider(provider: AuthTokenProvider): void;

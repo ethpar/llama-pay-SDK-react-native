@@ -1,7 +1,7 @@
 {
   "name": "llama-pay-sdk",
   "version": "1.0.0",
-  "description": "",
+  "description": "Official SDK for ethpar services. For more details visit https://www.ethpar.com/#join-network",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
   "scripts": {
@@ -11,9 +11,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:ethpar/wallet-SDK-react-native-plugin.git"
+    "url": "https://github.com/ethpar/llama-pay-SDK-react-native"
   },
-  "keywords": [],
+  "keywords": ["ethpar", "llama-pay"],
   "author": "",
   "license": "ISC",
   "type": "commonjs",

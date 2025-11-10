@@ -28,6 +28,7 @@ export class MerapiClient {
         'Content-Type': 'application/json',
         Accept: 'application/json'
     }
+    afterRequestCallback?: (responseBody: any, req: globalThis.Response) => void | Promise<void>
     authTokenProvider?: AuthTokenProvider
 
     constructor(baseUrl: string) {
@@ -41,9 +42,7 @@ export class MerapiClient {
         this.http.setAfterRequestCallback(async (res) => {
             if (!res.ok) {
                 const body = await res.json().catch((e) => null)
-                if (body?.error.code === '105') {
-                    throw new Error('Session expired')
-                }
+                this.afterRequestCallback?.call(null, body, res)
                 throw new Error(
                     body?.error?.server_message ||
                         body?.error?.code ||
