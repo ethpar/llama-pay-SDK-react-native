@@ -18,6 +18,7 @@ export interface ITransaction {
     updatedOn: Date
     remark: string | null
     type: 'normal' | 'merchant'
+    incoming: boolean
 
     // applicable only for merchant
     merchant: string | null

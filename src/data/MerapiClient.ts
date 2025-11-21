@@ -28,7 +28,10 @@ export class MerapiClient {
         'Content-Type': 'application/json',
         Accept: 'application/json'
     }
-    afterRequestCallback?: (responseBody: any, req: globalThis.Response) => void | Promise<void>
+    afterRequestCallback?: (
+        responseBody: any,
+        req: globalThis.Response
+    ) => void | Promise<void>
     authTokenProvider?: AuthTokenProvider
 
     constructor(baseUrl: string) {
@@ -188,7 +191,14 @@ export class MerapiClient {
         // TOOD: remove mock
         return {
             multisignatureWallet: true,
-            paymentWallet: true,
+            paymentWallet: true
         }
+    }
+
+    markTopup = async (walletId: string, hash: string): Promise<ITransaction> => {
+        return this.http.post(`/wallet/ccwallet/${walletId}/topup`, {
+            walletId,
+            hash
+        })
     }
 }
