@@ -17,6 +17,7 @@ export interface ITransaction {
     updatedOn: Date;
     remark: string | null;
     type: 'normal' | 'merchant';
+    incoming: boolean;
     merchant: string | null;
 }
 export type AssetType = 'native' | 'erc20';

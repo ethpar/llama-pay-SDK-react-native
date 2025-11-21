@@ -72,6 +72,7 @@ export declare class MerapiClient {
     }) => Promise<ITransaction>;
     getTokenInfo: (tokenAddress: string) => Promise<ITokenInfo | null>;
     getFeatureFlags: () => Promise<FeatureFlags>;
+    markTopup: (walletId: string, hash: string) => Promise<ITransaction>;
 }
 export {};
 //# sourceMappingURL=MerapiClient.d.ts.map
