@@ -62,6 +62,7 @@ export class MerapiClient {
     generateLoginCode = (params: {
         contact: string
         password?: string
+        deviceId: string
     }): Promise<void> => {
         return this.http.post('/wallet/login/code', params)
     }
@@ -69,6 +70,7 @@ export class MerapiClient {
     confirmLoginCode = (params: {
         contact: string
         code: string
+        deviceId: string
     }): Promise<{
         sessionKey: string
     }> => {

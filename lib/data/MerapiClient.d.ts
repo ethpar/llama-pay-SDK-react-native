@@ -19,10 +19,12 @@ export declare class MerapiClient {
     generateLoginCode: (params: {
         contact: string;
         password?: string;
+        deviceId: string;
     }) => Promise<void>;
     confirmLoginCode: (params: {
         contact: string;
         code: string;
+        deviceId: string;
     }) => Promise<{
         sessionKey: string;
     }>;
