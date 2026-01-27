@@ -23,5 +23,8 @@
   "devDependencies": {
     "@types/node": "^24.9.1",
     "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "react-native-device-info": "^15.0.1"
   }
 }
