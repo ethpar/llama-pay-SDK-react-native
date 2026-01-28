@@ -7,6 +7,7 @@ import {
 import { ITokenInfo } from '../models/ITokenInfo'
 import { ITransaction } from '../models/ITransaction'
 import { IUser } from '../models/IUser'
+import { getBundleId, getDeviceId, getUserAgent } from '../device-info'
 import { HttpClient } from './HttpClient'
 
 type Headers = { [key: string]: string }
@@ -34,9 +35,19 @@ export class MerapiClient {
     ) => void | Promise<void>
     authTokenProvider?: AuthTokenProvider
 
-    constructor(baseUrl: string) {
-        this.http = new HttpClient(baseUrl, this.headers)
+    constructor(params: { baseUrl: string; clientId: string }) {
+        this.http = new HttpClient(params.baseUrl, this.headers)
+        this.headers['X-Client-Id'] = params.clientId
         this.http.setBeforeRequestCallback(async (req) => {
+            if (!this.headers['X-Device-ID']) {
+                this.headers['X-Device-ID'] = await getDeviceId()
+            }
+            if (!this.headers['User-Agent']) {
+                this.headers['User-Agent'] = await getUserAgent()
+            }
+            if (!this.headers['X-Bundle-Id']) {
+                this.headers['X-Bundle-Id'] = await getBundleId()
+            }
             const authToken = await this.authTokenProvider?.call(null)
             if (authToken) {
                 req.headers['Authorization'] = authToken
@@ -73,10 +84,9 @@ export class MerapiClient {
         sessionKey: string
     }> => {
         return this.http
-            .post<Response<{ sessionKey: string }>>(
-                '/wallet/login/confirm',
-                params
-            )
+            .post<
+                Response<{ sessionKey: string }>
+            >('/wallet/login/confirm', params)
             .then((data) => data.data)
     }
 
@@ -195,7 +205,10 @@ export class MerapiClient {
         }
     }
 
-    markTopup = async (walletId: string, hash: string): Promise<ITransaction> => {
+    markTopup = async (
+        walletId: string,
+        hash: string
+    ): Promise<ITransaction> => {
         return this.http.post(`/wallet/ccwallet/${walletId}/topup`, {
             walletId,
             hash
