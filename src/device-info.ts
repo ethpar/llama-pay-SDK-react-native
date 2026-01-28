@@ -1,4 +1,4 @@
-export type Platform = 'web' | 'react-native' | 'node' | 'unknown'
+export type Platform = 'web' | 'react-native' | 'unknown'
 
 export function detectPlatform(): Platform {
     if (typeof window !== 'undefined' && typeof document !== 'undefined') {
@@ -10,40 +10,8 @@ export function detectPlatform(): Platform {
     ) {
         return 'react-native'
     }
-    if (
-        typeof process !== 'undefined' &&
-        process.versions &&
-        process.versions.node
-    ) {
-        return 'node'
-    }
 
     return 'unknown'
-}
-
-async function getHostInfo() {
-    const os = await import('node:os')
-    const platform = os.platform()
-    const arch = os.arch()
-    const release = os.release()
-    const version = os.version?.()
-
-    let osName
-    switch (platform) {
-        case 'darwin':
-            osName = 'macOS'
-            break
-        case 'win32':
-            osName = 'Windows'
-            break
-        case 'linux':
-            osName = 'Linux'
-            break
-        default:
-            osName = platform
-    }
-
-    return `${platform}-${arch};${release}-${version}`
 }
 
 export async function getUserAgent() {
@@ -55,8 +23,6 @@ export async function getUserAgent() {
         case 'react-native':
             const deviceInfo = await import('react-native-device-info')
             return deviceInfo.getUserAgent()
-        case 'node':
-            return await getHostInfo()
         default:
             return 'Unknown'
     }
@@ -74,23 +40,6 @@ function getWebDeviceId(): string {
     return id
 }
 
-export async function getNodeDeviceId() {
-    const [{ default: os }, { default: crypto }] = await Promise.all([
-        import('os'),
-        import('crypto')
-    ])
-
-    const data = [
-        os.hostname(),
-        os.platform(),
-        os.arch(),
-        os.release(),
-        os.cpus().length
-    ].join('|')
-
-    return crypto.createHash('sha256').update(data).digest('hex')
-}
-
 export async function getDeviceId() {
     const platform = detectPlatform()
 
@@ -100,8 +49,6 @@ export async function getDeviceId() {
         case 'react-native':
             const deviceInfo = await import('react-native-device-info')
             return deviceInfo.getDeviceId()
-        case 'node':
-            return await getNodeDeviceId()
         default:
             return 'Unknown'
     }
@@ -116,8 +63,6 @@ export async function getBundleId() {
         case 'react-native':
             const deviceInfo = await import('react-native-device-info')
             return deviceInfo.getBundleId()
-        case 'node':
-            return process.title
         default:
             return 'Unknown'
     }
