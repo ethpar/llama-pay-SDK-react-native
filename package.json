@@ -1,6 +1,6 @@
 {
   "name": "llama-pay-sdk",
-  "version": "1.0.6",
+  "version": "2.0.0",
   "description": "Official SDK for ethpar services. For more details visit https://www.ethpar.com/#join-network",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",

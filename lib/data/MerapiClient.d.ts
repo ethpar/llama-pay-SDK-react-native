@@ -14,17 +14,18 @@ export declare class MerapiClient {
     headers: Headers;
     afterRequestCallback?: (responseBody: any, req: globalThis.Response) => void | Promise<void>;
     authTokenProvider?: AuthTokenProvider;
-    constructor(baseUrl: string);
+    constructor(params: {
+        baseUrl: string;
+        clientId: string;
+    });
     setAuthTokenProvider(provider: AuthTokenProvider): void;
     generateLoginCode: (params: {
         contact: string;
         password?: string;
-        deviceId: string;
     }) => Promise<void>;
     confirmLoginCode: (params: {
         contact: string;
         code: string;
-        deviceId: string;
     }) => Promise<{
         sessionKey: string;
     }>;
