@@ -1,0 +1,26 @@
+name: llama_pay_sdk
+description: Official SDK for ethpar services. Flutter implementation.
+version: 1.0.0
+homepage: https://www.ethpar.com
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+  flutter: ">=3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  http: ^1.1.0
+  device_info_plus: ^9.1.0
+  uuid: ^4.2.1
+  json_annotation: ^4.8.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+  json_serializable: ^6.7.1
+  build_runner: ^2.4.7
+
+flutter:
+  # No Flutter-specific assets needed for this SDK
