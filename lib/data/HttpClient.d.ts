@@ -8,8 +8,6 @@ type Request = {
 };
 interface RequestConfig {
     headers?: Record<string, string>;
-    beforeRequest?: (req: Request) => void | Promise<void>;
-    afterRequest?: (response: Response) => void | Promise<void>;
 }
 export declare class HttpClient {
     private baseUrl;

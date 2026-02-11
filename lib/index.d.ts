@@ -10,4 +10,8 @@ export { Account, HDWallet } from './models/Wallet';
 export { DoraApiClient } from './data/DoraApiClient';
 export { MerapiClient } from './data/MerapiClient';
 export { FeatureFlags } from './models/FeatureFlags';
+export { CashoutClient } from './data/CashoutClient';
+export { Atm } from './models/cashout/Atm';
+export { CashoutStatus } from './models/cashout/CashoutStatus';
+export { CashoutRequest } from './models/cashout/CashoutRequest';
 //# sourceMappingURL=index.d.ts.map

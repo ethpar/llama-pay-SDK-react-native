@@ -1,0 +1,1 @@
+{"version":3,"file":"ResponseWrapper.d.ts","sourceRoot":"","sources":["../../src/models/ResponseWrapper.ts"],"names":[],"mappings":"AAAA,MAAM,CAAC,OAAO,WAAW,eAAe,CAAC,CAAC;IACtC,MAAM,EAAE,IAAI,GAAG,OAAO,CAAA;IACtB,KAAK,EAAE;QACH,IAAI,EAAE,MAAM,CAAA;QACZ,cAAc,EAAE,MAAM,CAAA;KACzB,GAAG,IAAI,CAAA;IACR,IAAI,EAAE,CAAC,CAAA;CACV"}

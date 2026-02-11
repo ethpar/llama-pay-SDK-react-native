@@ -9,6 +9,7 @@ import { ITransaction } from '../models/ITransaction'
 import { IUser } from '../models/IUser'
 import { getBundleId, getDeviceId, getUserAgent } from '../device-info'
 import { HttpClient } from './HttpClient'
+import ResponseWrapper from '../models/ResponseWrapper'
 
 type Headers = { [key: string]: string }
 
@@ -77,17 +78,18 @@ export class MerapiClient {
         return this.http.post('/wallet/login/code', params)
     }
 
-    confirmLoginCode = (params: {
+    confirmLoginCode = async (params: {
         contact: string
         code: string
     }): Promise<{
         sessionKey: string
     }> => {
-        return this.http
-            .post<
-                Response<{ sessionKey: string }>
-            >('/wallet/login/confirm', params)
-            .then((data) => data.data)
+        const result: ResponseWrapper<{ sessionKey: string }> =
+            await this.http.post<Response<{ sessionKey: string }>>(
+                '/wallet/login/confirm',
+                params
+            )
+        return result.data
     }
 
     getCurrentUser = (): Promise<IUser> => {

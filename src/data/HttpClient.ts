@@ -11,8 +11,6 @@ type Request = {
 
 interface RequestConfig {
   headers?: Record<string, string>;
-  beforeRequest?: (req: Request) => void | Promise<void>;
-  afterRequest?: (response: Response) => void | Promise<void>;
 }
 
 export class HttpClient {
@@ -21,7 +19,7 @@ export class HttpClient {
   private globalBeforeRequest?: (
     req: Request
   ) => void | Promise<void>;
-  private globalAfterRequest?: (response: Response) => void | Promise<void>;
+  private globalAfterRequest?: (response: Response, responseBody: any) => void | Promise<void>;
 
   constructor(baseUrl: string, defaultHeaders: Record<string, string> = {}) {
     this.baseUrl = baseUrl.endsWith("/") ? baseUrl.slice(0, -1) : baseUrl;
@@ -70,25 +68,18 @@ export class HttpClient {
       await this.globalBeforeRequest(request);
     }
     
-    if (config.beforeRequest) {
-      await config.beforeRequest(request);
-    }
     try {
       const response = await fetch(request.url, {
-      method: request.method,
-      headers: request.headers,
-      body: request.body,
-    });
-
-      if (this.globalAfterRequest) {
-        await this.globalAfterRequest(response);
-      }
-
-      if (config.afterRequest) {
-        await config.afterRequest(response);
-      }
+        method: request.method,
+        headers: request.headers,
+        body: request.body,
+      });
 
       const responseBody = await response.json().catch(e => undefined);
+
+      if (this.globalAfterRequest) {
+        await this.globalAfterRequest(response, responseBody);
+      }
 
       return responseBody;
     } catch (error) {
