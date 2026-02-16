@@ -7,11 +7,12 @@ export { IUser } from './models/IUser';
 export { SimpleMultisigTransactionData } from './models/SimpleMultisigTransactionData';
 export { ERC20Transaction, NativeTransaction, Transaction } from './models/Transaction';
 export { Account, HDWallet } from './models/Wallet';
-export { DoraApiClient } from './data/DoraApiClient';
-export { MerapiClient } from './data/MerapiClient';
+export { DoraApiClient } from './DoraApiClient';
+export { MerapiClient } from './MerapiClient';
 export { FeatureFlags } from './models/FeatureFlags';
-export { CashoutClient } from './data/CashoutClient';
+export { CashoutClient } from './CashoutClient';
 export { Atm } from './models/cashout/Atm';
 export { CashoutStatus } from './models/cashout/CashoutStatus';
 export { CashoutRequest } from './models/cashout/CashoutRequest';
+export * as crypto from './crypto';
 //# sourceMappingURL=index.d.ts.map
