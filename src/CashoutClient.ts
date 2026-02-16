@@ -1,8 +1,8 @@
 import axios, { AxiosInstance } from 'axios'
-import { Atm } from '../models/cashout/Atm'
-import { CashoutRequest } from '../models/cashout/CashoutRequest'
-import ResponseWrapper from '../models/ResponseWrapper'
-import { ConfirmSecureWordResponse } from '../models/cashout/ConfirmSecureWordResponse'
+import { Atm } from './models/cashout/Atm'
+import { CashoutRequest } from './models/cashout/CashoutRequest'
+import ResponseWrapper from './models/ResponseWrapper'
+import { ConfirmSecureWordResponse } from './models/cashout/ConfirmSecureWordResponse'
 
 export class CashoutClient {
     http: AxiosInstance

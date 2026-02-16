@@ -1,4 +1,4 @@
-import { ERC20Transaction, NativeTransaction } from '../models/Transaction'
+import { ERC20Transaction, NativeTransaction } from './models/Transaction'
 import { HttpClient } from './HttpClient'
 
 type Headers = { [key: string]: string }

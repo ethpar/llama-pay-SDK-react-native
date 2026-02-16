@@ -1,15 +1,15 @@
-import { BalanceResponse } from '../models/Balance'
-import { FeatureFlags } from '../models/FeatureFlags'
+import { BalanceResponse } from './models/Balance'
+import { FeatureFlags } from './models/FeatureFlags'
 import {
     ICreditCardMultisigWallet,
     IGeneralMultisigWallet
-} from '../models/IMultisigWallet'
-import { ITokenInfo } from '../models/ITokenInfo'
-import { ITransaction } from '../models/ITransaction'
-import { IUser } from '../models/IUser'
-import { getBundleId, getDeviceId, getUserAgent } from '../device-info'
+} from './models/IMultisigWallet'
+import { ITokenInfo } from './models/ITokenInfo'
+import { ITransaction } from './models/ITransaction'
+import { IUser } from './models/IUser'
+import { getBundleId, getDeviceId, getUserAgent } from './device-info'
 import { HttpClient } from './HttpClient'
-import ResponseWrapper from '../models/ResponseWrapper'
+import ResponseWrapper from './models/ResponseWrapper'
 
 type Headers = { [key: string]: string }
 
