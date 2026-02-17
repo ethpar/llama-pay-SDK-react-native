@@ -1,7 +1,6 @@
 import { ethers, TransactionResponse } from 'ethers'
 import { SimpleMultisigTransactionData } from './models/SimpleMultisigTransactionData'
-
-const erc20Abi = require('./erc20.abi.json')
+import { ERC20_ABI } from './erc20Abi'
 
 export type TransactionRequest = ethers.TransactionRequest
 
@@ -15,7 +14,7 @@ function buildERC20TransactionData(params: {
     value: ethers.BigNumberish
     tokenAddress: string
 }): ethers.TransactionRequest {
-    const token = new ethers.Interface(erc20Abi)
+    const token = new ethers.Interface(ERC20_ABI)
 
     const data = token.encodeFunctionData('transfer', [params.to, params.value])
 
@@ -27,37 +26,30 @@ function buildERC20TransactionData(params: {
     }
 }
 
-export async function signTx(
+export async function sendNative(
     privateKey: string,
     tx: TransactionRequest,
     rpcUrl?: string
-): Promise<string> {
+): Promise<TransactionResponse> {
     let txReq = { ...tx }
     const provider = rpcUrl ? new ethers.JsonRpcProvider(rpcUrl) : null
     const wallet = new ethers.Wallet(privateKey, provider)
-    const populated = await wallet.populateTransaction(txReq)
-    return wallet.signTransaction(populated)
+    return wallet.sendTransaction(txReq)
 }
 
-export async function signERC20(
+export async function sendERC20(
     privateKey: string,
     tx: TransactionRequest & { tokenAddress: string },
     rpcUrl?: string
-): Promise<string> {
-    if (!tx.from) throw new Error('Missing from')
+): Promise<TransactionResponse> {
     if (!tx.to) throw new Error('Missing to')
     if (tx.value == null) throw new Error('Missing value')
 
-    const txReq = buildERC20TransactionData({
-        from: tx.from,
-        to: tx.to,
-        value: tx.value,
-        tokenAddress: tx.tokenAddress
-    })
     const provider = rpcUrl ? new ethers.JsonRpcProvider(rpcUrl) : null
     const wallet = new ethers.Wallet(privateKey, provider)
-    const populated = await wallet.populateTransaction(txReq)
-    return wallet.signTransaction(populated)
+
+    const token = new ethers.Contract(tx.tokenAddress, ERC20_ABI, wallet)
+    return token.transfer(tx.to, tx.value)
 }
 
 export async function signTypedData(
@@ -82,13 +74,4 @@ export async function signTypedData(
     )
 
     return signature
-}
-
-export async function broadcastTx(
-    signedTx: string,
-    rpcUrl: string
-): Promise<TransactionResponse> {
-    const provider = new ethers.JsonRpcProvider(rpcUrl)
-
-    return provider.broadcastTransaction(signedTx)
 }
