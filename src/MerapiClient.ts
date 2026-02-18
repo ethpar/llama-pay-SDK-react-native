@@ -120,6 +120,18 @@ export class MerapiClient {
         return this.http.get<IUser>('/wallet/users/me').then((res) => res.data)
     }
 
+    updateProfile = async (params: {
+        firstName: string
+        lastName: string
+    }): Promise<IUser> => {
+        return this.http
+            .post<IUser>('/wallet/profile', {
+                first_name: params.firstName,
+                second_name: params.lastName
+            })
+            .then((res) => res.data)
+    }
+
     getBalances = (
         address: string,
         tokens: {
