@@ -1,8 +1,8 @@
-export interface ConfirmSecureWordResponse {
+export interface CreateCashoutResponse {
     secureCode: string;
     address: string;
     usdAmount: number;
     btcAmount: number;
     btcWholeUnitPrice: number;
 }
-//# sourceMappingURL=ConfirmSecureWordResponse.d.ts.map
+//# sourceMappingURL=CreateCashoutResponse.d.ts.map

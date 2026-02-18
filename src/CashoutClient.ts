@@ -2,7 +2,7 @@ import axios, { AxiosInstance } from 'axios'
 import { Atm } from './models/cashout/Atm'
 import { CashoutRequest } from './models/cashout/CashoutRequest'
 import ResponseWrapper from './models/ResponseWrapper'
-import { ConfirmSecureWordResponse } from './models/cashout/ConfirmSecureWordResponse'
+import { CreateCashoutResponse } from './models/cashout/CreateCashoutResponse'
 
 export class CashoutClient {
     http: AxiosInstance
@@ -68,18 +68,20 @@ export class CashoutClient {
         data.append('word_code', '1')
         data.append('_t', new Date().getTime().toString())
 
-        await this.http.post('/wac/pcode/verify', data)
+        await this.http.post('/wac/pcode/verify', data, {
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+        })
     }
 
-    confirmVerificationWord = async (params: {
+    createCashoutRequest = async (params: {
         atmId: string
         amount: string
-        verificationCode: string
-    }): Promise<ConfirmSecureWordResponse> => {
+    }): Promise<CreateCashoutResponse> => {
         const data = new URLSearchParams()
-        data.append('atm_id', params.amount)
+        data.append('atm_id', params.atmId)
         data.append('amount', params.amount)
-        data.append('verification_code', params.verificationCode)
         data.append('_t', new Date().getTime().toString())
 
         const response = await this.http.post<
@@ -94,7 +96,11 @@ export class CashoutClient {
                     }
                 ]
             }>
-        >('/wac/pcode', data)
+        >('/wac/pcode', data, {
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+        })
         const result = response.data.data.items[0]
 
         return {

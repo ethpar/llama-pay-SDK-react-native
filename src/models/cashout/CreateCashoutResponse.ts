@@ -1,4 +1,4 @@
-export interface ConfirmSecureWordResponse {
+export interface CreateCashoutResponse {
     secureCode: string
     address: string
     usdAmount: number

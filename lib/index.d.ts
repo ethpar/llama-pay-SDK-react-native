@@ -14,5 +14,6 @@ export { CashoutClient } from './CashoutClient';
 export { Atm } from './models/cashout/Atm';
 export { CashoutStatus } from './models/cashout/CashoutStatus';
 export { CashoutRequest } from './models/cashout/CashoutRequest';
+export { CreateCashoutResponse } from './models/cashout/CreateCashoutResponse';
 export * as crypto from './crypto';
 //# sourceMappingURL=index.d.ts.map
