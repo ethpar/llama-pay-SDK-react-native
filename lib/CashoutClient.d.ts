@@ -1,7 +1,7 @@
 import { AxiosInstance } from 'axios';
 import { Atm } from './models/cashout/Atm';
 import { CashoutRequest } from './models/cashout/CashoutRequest';
-import { ConfirmSecureWordResponse } from './models/cashout/ConfirmSecureWordResponse';
+import { CreateCashoutResponse } from './models/cashout/CreateCashoutResponse';
 export declare class CashoutClient {
     http: AxiosInstance;
     constructor();
@@ -13,11 +13,10 @@ export declare class CashoutClient {
         lastName: string;
         phoneNumber: string;
     }) => Promise<void>;
-    confirmVerificationWord: (params: {
+    createCashoutRequest: (params: {
         atmId: string;
         amount: string;
-        verificationCode: string;
-    }) => Promise<ConfirmSecureWordResponse>;
+    }) => Promise<CreateCashoutResponse>;
     getCashOutRequest: (cashCode: string) => Promise<CashoutRequest>;
 }
 //# sourceMappingURL=CashoutClient.d.ts.map

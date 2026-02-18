@@ -2,12 +2,13 @@ import { AxiosInstance, AxiosResponse } from 'axios';
 import { BalanceResponse } from './models/Balance';
 import { Atm } from './models/cashout/Atm';
 import { CashoutRequest } from './models/cashout/CashoutRequest';
-import { ConfirmSecureWordResponse } from './models/cashout/ConfirmSecureWordResponse';
+import { CreateCashoutResponse } from './models/cashout/CreateCashoutResponse';
 import { FeatureFlags } from './models/FeatureFlags';
 import { ICreditCardMultisigWallet, IGeneralMultisigWallet } from './models/IMultisigWallet';
 import { ITokenInfo } from './models/ITokenInfo';
 import { ITransaction } from './models/ITransaction';
 import { IUser } from './models/IUser';
+import { CashoutLimits } from './models/cashout/CashoutLimits';
 type AuthTokenProvider = () => Promise<string | null>;
 export declare class MerapiClient {
     http: AxiosInstance;
@@ -78,17 +79,17 @@ export declare class MerapiClient {
     getTokenInfo: (tokenAddress: string) => Promise<ITokenInfo | null>;
     getFeatureFlags: () => Promise<FeatureFlags>;
     markTopup: (walletId: string, hash: string) => Promise<ITransaction>;
+    getCashoutLimits: () => Promise<CashoutLimits>;
     getAtmList: () => Promise<Atm[]>;
     sendVerificationWord: (params: {
         firstName: string;
         lastName: string;
         phoneNumber: string;
     }) => Promise<void>;
-    confirmVerificationWord: (params: {
+    createCashoutRequest: (params: {
         atmId: string;
         amount: string;
-        verificationCode: string;
-    }) => Promise<ConfirmSecureWordResponse>;
+    }) => Promise<CreateCashoutResponse>;
     getCashOutRequest: (cashCode: string) => Promise<CashoutRequest>;
 }
 export {};

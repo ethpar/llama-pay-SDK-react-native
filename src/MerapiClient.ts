@@ -3,7 +3,7 @@ import { getBundleId, getDeviceId, getUserAgent } from './device-info'
 import { BalanceResponse } from './models/Balance'
 import { Atm } from './models/cashout/Atm'
 import { CashoutRequest } from './models/cashout/CashoutRequest'
-import { ConfirmSecureWordResponse } from './models/cashout/ConfirmSecureWordResponse'
+import { CreateCashoutResponse } from './models/cashout/CreateCashoutResponse'
 import { FeatureFlags } from './models/FeatureFlags'
 import {
     ICreditCardMultisigWallet,
@@ -13,6 +13,7 @@ import { ITokenInfo } from './models/ITokenInfo'
 import { ITransaction } from './models/ITransaction'
 import { IUser } from './models/IUser'
 import ResponseWrapper from './models/ResponseWrapper'
+import { CashoutLimits } from './models/cashout/CashoutLimits'
 
 type AuthTokenProvider = () => Promise<string | null>
 
@@ -273,99 +274,111 @@ export class MerapiClient {
 
     // cashout
 
+    getCashoutLimits = async (): Promise<CashoutLimits> => {
+        return this.http
+            .get<CashoutLimits>('/cashout/limits')
+            .then((res) => res.data)
+    }
+
     getAtmList = async () => {
-            const response =
-                await this.http.get<ResponseWrapper<{ items: Atm[] }>>(
-                    '/cashout/atm/list'
-                )
-            return response.data.data.items
-        }
-    
-        sendVerificationWord = async (params: {
-            firstName: string
-            lastName: string
-            phoneNumber: string
-        }) => {
-            const data = new URLSearchParams()
-            data.append('first_name', params.firstName)
-            data.append('last_name', params.lastName)
-            data.append('phone_number', params.phoneNumber)
-            data.append('word_code', '1')
-            data.append('_t', new Date().getTime().toString())
-    
-            await this.http.post('/cashout/pcode/verify', data)
-        }
-    
-        confirmVerificationWord = async (params: {
-            atmId: string
-            amount: string
-            verificationCode: string
-        }): Promise<ConfirmSecureWordResponse> => {
-            const data = new URLSearchParams()
-            data.append('atm_id', params.amount)
-            data.append('amount', params.amount)
-            data.append('verification_code', params.verificationCode)
-            data.append('_t', new Date().getTime().toString())
-    
-            const response = await this.http.post<
-                ResponseWrapper<{
-                    items: [
-                        {
-                            secure_code: string
-                            address: string
-                            usd_amount: number
-                            btc_amount: number
-                            btc_whole_unit_price: number
-                        }
-                    ]
-                }>
-            >('/cashout/pcode', data)
-            const result = response.data.data.items[0]
-    
-            return {
-                secureCode: result.secure_code,
-                address: result.address,
-                usdAmount: result.usd_amount,
-                btcAmount: result.btc_amount,
-                btcWholeUnitPrice: result.btc_whole_unit_price
+        const response =
+            await this.http.get<ResponseWrapper<{ items: Atm[] }>>(
+                '/cashout/atm/list'
+            )
+        return response.data.data.items
+    }
+
+    sendVerificationWord = async (params: {
+        firstName: string
+        lastName: string
+        phoneNumber: string
+    }) => {
+        const data = new URLSearchParams()
+        data.append('first_name', params.firstName)
+        data.append('last_name', params.lastName)
+        data.append('phone_number', params.phoneNumber)
+        data.append('word_code', '1')
+        data.append('_t', new Date().getTime().toString())
+
+        await this.http.post('/cashout/pcode/verify', data, {
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
             }
-        }
-    
-        getCashOutRequest = async (cashCode: string): Promise<CashoutRequest> => {
-            const response = await this.http.get<
-                ResponseWrapper<{
-                    items: [
-                        {
-                            pcode: null
-                            status: 'A' | string
-                            address: string
-                            usd_amount: number
-                            btc_amount: number
-                            btc_whole_unit_price: number
-                            expiration: string
-                            atm_id: number
-                            loc_description: string
-                            loc_lat: number
-                            loc_lon: number
-                        }
-                    ]
-                }>
-            >(`/cashout/pcode/${cashCode}`)
-            const result = response.data.data.items[0]
-    
-            return {
-                id: cashCode,
-                pcode: result.pcode,
-                status: result.status as any,
-                address: result.address,
-                usdAmount: result.usd_amount,
-                btcAmount: result.btc_amount,
-                btcWholeUnitPrice: result.btc_whole_unit_price,
-                expiration: result.expiration,
-                atmId: result.atm_id,
-                locDescription: result.loc_description,
-                locLat: result.loc_lat,
-                locLon: result.loc_lon
+        })
+    }
+
+    createCashoutRequest = async (params: {
+        atmId: string
+        amount: string
+    }): Promise<CreateCashoutResponse> => {
+        const data = new URLSearchParams()
+        data.append('atm_id', params.atmId)
+        data.append('amount', params.amount)
+        data.append('_t', new Date().getTime().toString())
+
+        const response = await this.http.post<
+            ResponseWrapper<{
+                items: [
+                    {
+                        secure_code: string
+                        address: string
+                        usd_amount: number
+                        btc_amount: number
+                        btc_whole_unit_price: number
+                    }
+                ]
+            }>
+        >('/cashout/pcode', data, {
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
             }
+        })
+        const result = response.data.data.items[0]
+
+        return {
+            secureCode: result.secure_code,
+            address: result.address,
+            usdAmount: result.usd_amount,
+            btcAmount: result.btc_amount,
+            btcWholeUnitPrice: result.btc_whole_unit_price
         }
+    }
+
+    getCashOutRequest = async (cashCode: string): Promise<CashoutRequest> => {
+        const response = await this.http.get<
+            ResponseWrapper<{
+                items: [
+                    {
+                        pcode: null
+                        status: 'A' | string
+                        address: string
+                        usd_amount: number
+                        btc_amount: number
+                        btc_whole_unit_price: number
+                        expiration: string
+                        atm_id: number
+                        loc_description: string
+                        loc_lat: number
+                        loc_lon: number
+                    }
+                ]
+            }>
+        >(`/cashout/pcode/${cashCode}`)
+        const result = response.data.data.items[0]
+
+        return {
+            id: cashCode,
+            pcode: result.pcode,
+            status: result.status as any,
+            address: result.address,
+            usdAmount: result.usd_amount,
+            btcAmount: result.btc_amount,
+            btcWholeUnitPrice: result.btc_whole_unit_price,
+            expiration: result.expiration,
+            atmId: result.atm_id,
+            locDescription: result.loc_description,
+            locLat: result.loc_lat,
+            locLon: result.loc_lon
+        }
+    }
 }
