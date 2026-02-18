@@ -33,6 +33,10 @@ export declare class MerapiClient {
         sessionKey: string;
     }>;
     getCurrentUser: () => Promise<IUser>;
+    updateProfile: (params: {
+        firstName: string;
+        lastName: string;
+    }) => Promise<IUser>;
     getBalances: (address: string, tokens: {
         tokenAddress: string | null;
     }[]) => Promise<BalanceResponse[]>;
