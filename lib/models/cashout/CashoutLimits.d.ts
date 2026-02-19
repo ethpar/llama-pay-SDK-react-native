@@ -4,6 +4,8 @@ export interface CashoutLimits {
     maxAmountVerified: number;
     yearSummaryAmount: number;
     yearSummaryAmountVerified: number;
+    feeAmount: number;
+    yearRemainAmount: number;
     verified: boolean;
 }
 //# sourceMappingURL=CashoutLimits.d.ts.map
