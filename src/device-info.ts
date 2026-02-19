@@ -40,6 +40,49 @@ function getWebDeviceId(): string {
     return id
 }
 
+const SOC_PATTERNS = [
+    /^s\d+e\d+/i, // s5e9925 (Exynos)
+    /^mt\d+/i, // mt6785 (Mediatek)
+    /^sdm?\d+/i, // sm8350 / sdm845 (Snapdragon)
+    /^kirin\d+/i,
+    /^exynos\d+/i,
+    /^universal\d+/i,
+    /^gs\d+/i // Google tensor
+]
+
+function looksLikeSoC(id?: string | null): boolean {
+    if (!id) return true
+    return SOC_PATTERNS.some((r) => r.test(id))
+}
+
+export async function getMobileDeviceId(): Promise<string> {
+    try {
+        const DeviceInfo = await import('react-native-device-info')
+        const [deviceId, model, brand, product, hardware] = await Promise.all([
+            DeviceInfo.getDeviceId(),
+            DeviceInfo.getModel(),
+            DeviceInfo.getBrand(),
+            DeviceInfo.getProduct(),
+            DeviceInfo.getHardware()
+        ])
+        if (deviceId && !looksLikeSoC(deviceId)) {
+            return deviceId
+        }
+        if (product && !looksLikeSoC(product)) {
+            return product
+        }
+        if (hardware && !looksLikeSoC(hardware)) {
+            return hardware
+        }
+        if (brand || model) {
+            return `${brand ?? ''} ${model ?? ''}`.trim()
+        }
+        return 'unknown-device'
+    } catch {
+        return 'unknown-device'
+    }
+}
+
 export async function getDeviceId() {
     const platform = detectPlatform()
 
@@ -47,8 +90,7 @@ export async function getDeviceId() {
         case 'web':
             return getWebDeviceId()
         case 'react-native':
-            const deviceInfo = await import('react-native-device-info')
-            return deviceInfo.getDeviceId()
+            return getMobileDeviceId()
         default:
             return 'Unknown'
     }
