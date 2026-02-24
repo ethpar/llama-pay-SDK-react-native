@@ -3,6 +3,7 @@ import { Atm } from './models/cashout/Atm'
 import { CashoutRequest } from './models/cashout/CashoutRequest'
 import ResponseWrapper from './models/ResponseWrapper'
 import { CreateCashoutResponse } from './models/cashout/CreateCashoutResponse'
+import CashoutResponse from './models/cashout/CashoutResponse'
 
 export class CashoutClient {
     http: AxiosInstance
@@ -115,27 +116,13 @@ export class CashoutClient {
     getCashOutRequest = async (cashCode: string): Promise<CashoutRequest> => {
         const response = await this.http.get<
             ResponseWrapper<{
-                items: [
-                    {
-                        pcode: null
-                        status: 'A' | string
-                        address: string
-                        usd_amount: number
-                        btc_amount: number
-                        btc_whole_unit_price: number
-                        expiration: string
-                        atm_id: number
-                        loc_description: string
-                        loc_lat: number
-                        loc_lon: number
-                    }
-                ]
+                items: CashoutResponse[]
             }>
         >(`/wac/pcode/${cashCode}`)
         const result = response.data.data.items[0]
 
         return {
-            id: cashCode,
+            secureCode: result.secure_code,
             pcode: result.pcode,
             status: result.status as any,
             address: result.address,

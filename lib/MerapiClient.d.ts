@@ -95,6 +95,7 @@ export declare class MerapiClient {
         amount: string;
     }) => Promise<CreateCashoutResponse>;
     getCashOutRequest: (cashCode: string) => Promise<CashoutRequest>;
+    getCashOutRequests: () => Promise<CashoutRequest[]>;
 }
 export {};
 //# sourceMappingURL=MerapiClient.d.ts.map

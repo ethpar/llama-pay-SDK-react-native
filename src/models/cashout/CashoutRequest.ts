@@ -1,7 +1,7 @@
 import { CashoutStatus } from './CashoutStatus'
 
 export interface CashoutRequest {
-    id: string
+    secureCode: string
     pcode: string | null
     status: CashoutStatus
     address: string
