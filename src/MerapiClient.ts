@@ -14,6 +14,7 @@ import { ITransaction } from './models/ITransaction'
 import { IUser } from './models/IUser'
 import ResponseWrapper from './models/ResponseWrapper'
 import { CashoutLimits } from './models/cashout/CashoutLimits'
+import CashoutResponse from './models/cashout/CashoutResponse'
 
 type AuthTokenProvider = () => Promise<string | null>
 
@@ -359,38 +360,37 @@ export class MerapiClient {
     getCashOutRequest = async (cashCode: string): Promise<CashoutRequest> => {
         const response = await this.http.get<
             ResponseWrapper<{
-                items: [
-                    {
-                        pcode: null
-                        status: 'A' | string
-                        address: string
-                        usd_amount: number
-                        btc_amount: number
-                        btc_whole_unit_price: number
-                        expiration: string
-                        atm_id: number
-                        loc_description: string
-                        loc_lat: number
-                        loc_lon: number
-                    }
-                ]
+                items: CashoutResponse[]
             }>
         >(`/cashout/pcode/${cashCode}`)
         const result = response.data.data.items[0]
+        return buildCashoutItem(result)
+    }
 
-        return {
-            id: cashCode,
-            pcode: result.pcode,
-            status: result.status as any,
-            address: result.address,
-            usdAmount: result.usd_amount,
-            btcAmount: result.btc_amount,
-            btcWholeUnitPrice: result.btc_whole_unit_price,
-            expiration: result.expiration,
-            atmId: result.atm_id,
-            locDescription: result.loc_description,
-            locLat: result.loc_lat,
-            locLon: result.loc_lon
-        }
+    getCashOutRequests = async (): Promise<CashoutRequest[]> => {
+        const response = await this.http.get<
+            ResponseWrapper<{
+                items: []
+            }>
+        >('/cashout/pcodes')
+        const result = response.data.data.items
+        return result.map(buildCashoutItem)
+    }
+}
+
+function buildCashoutItem(result: CashoutResponse): CashoutRequest {
+    return {
+        secureCode: result.secure_code,
+        pcode: result.pcode,
+        status: result.status as any,
+        address: result.address,
+        usdAmount: result.usd_amount,
+        btcAmount: result.btc_amount,
+        btcWholeUnitPrice: result.btc_whole_unit_price,
+        expiration: result.expiration,
+        atmId: result.atm_id,
+        locDescription: result.loc_description,
+        locLat: result.loc_lat,
+        locLon: result.loc_lon
     }
 }
