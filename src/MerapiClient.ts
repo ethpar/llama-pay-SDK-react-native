@@ -376,6 +376,15 @@ export class MerapiClient {
         const result = response.data.data.items
         return result.map(buildCashoutItem)
     }
+
+    submitTransaction = async (params: {
+        transaction: string
+    }): Promise<{
+        hash: string
+    }> => {
+        const response = await this.http.post<{ hash: string }>('/wallet/transaction', params)
+        return response.data
+    }
 }
 
 function buildCashoutItem(result: CashoutResponse): CashoutRequest {
