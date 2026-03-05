@@ -20,4 +20,5 @@ export declare function signERC20Transfer({ tokenAddress, toAddress, amount, pri
     rpcUrl: string;
 }): Promise<string>;
 export declare function signTypedData(privateKey: string, txData: SimpleMultisigTransactionData, rpcUrl?: string): Promise<string>;
+export declare function sha256(message: string): Promise<string>;
 //# sourceMappingURL=crypto.d.ts.map
