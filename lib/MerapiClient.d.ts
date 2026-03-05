@@ -96,11 +96,17 @@ export declare class MerapiClient {
     }) => Promise<CreateCashoutResponse>;
     getCashOutRequest: (cashCode: string) => Promise<CashoutRequest>;
     getCashOutRequests: () => Promise<CashoutRequest[]>;
+    linkCardToAddress: (params: {
+        address: string;
+        cardhash: string;
+    }) => Promise<void>;
+    getAddressByCardHash: (cardhash: string) => Promise<string | undefined>;
     submitTransaction: (params: {
         transaction: string;
     }) => Promise<{
         hash: string;
     }>;
+    getRpcUrl: () => Promise<string>;
 }
 export {};
 //# sourceMappingURL=MerapiClient.d.ts.map

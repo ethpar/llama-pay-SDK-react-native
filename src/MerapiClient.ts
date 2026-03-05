@@ -377,13 +377,42 @@ export class MerapiClient {
         return result.map(buildCashoutItem)
     }
 
+    linkCardToAddress = async (params: {
+        address: string
+        cardhash: string
+    }): Promise<void> => {
+        await this.http.post<ResponseWrapper<{ items: [{}] }>>(
+            '/cashout/card/link',
+            params
+        )
+    }
+
+    getAddressByCardHash = async (
+        cardhash: string
+    ): Promise<string | undefined> => {
+        const response = await this.http.get<
+            ResponseWrapper<{ items: [{ address: string } | undefined] }>
+        >(`/cashout/card/link?cardhash=${cardhash}`)
+        return response.data.data.items[0]?.address
+    }
+
     submitTransaction = async (params: {
         transaction: string
     }): Promise<{
         hash: string
     }> => {
-        const response = await this.http.post<{ hash: string }>('/wallet/transaction', params)
+        const response = await this.http.post<{ hash: string }>(
+            '/wallet/transaction',
+            params
+        )
         return response.data
+    }
+
+    getRpcUrl = async (): Promise<string> => {
+        const response = await this.http.post<{ nodeUrl: string }>(
+            '/wallet/service/info'
+        )
+        return response.data.nodeUrl
     }
 }
 
