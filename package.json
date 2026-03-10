@@ -15,6 +15,11 @@
       "import": "./lib/crypto.js",
       "types": "./lib/crypto.d.ts"
     },
+    "./dora": {
+      "require": "./lib/dora/index.js",
+      "import": "./lib/dora/index.js",
+      "types": "./lib/dora/index.d.ts"
+    },
     "./device-info": {
       "require": "./lib/device-info.js",
       "import": "./lib/device-info.js",

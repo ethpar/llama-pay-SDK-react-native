@@ -1,5 +1,5 @@
-import { ERC20Transaction, NativeTransaction } from './models/Transaction';
-import { HttpClient } from './HttpClient';
+import { ERC20Transaction, NativeTransaction } from './types/Transaction';
+import { HttpClient } from '../HttpClient';
 type Headers = {
     [key: string]: string;
 };

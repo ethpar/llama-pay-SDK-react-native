@@ -1,6 +1,6 @@
 import { SimpleMultisigTransactionData } from './SimpleMultisigTransactionData'
 
-export interface ITransaction {
+export interface IMultisigTransaction {
     id: string
     assetType: AssetType
     asset: TransactionAsset

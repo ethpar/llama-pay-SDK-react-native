@@ -13,18 +13,12 @@ export {
     FeeQuote,
     ISignature,
     TransactionAsset,
-    ITransaction
-} from './models/ITransaction'
+    IMultisigTransaction as ITransaction
+} from './models/IMultisigTransaction'
 export { IUser } from './models/IUser'
 export { SimpleMultisigTransactionData } from './models/SimpleMultisigTransactionData'
-export {
-    ERC20Transaction,
-    NativeTransaction,
-    Transaction
-} from './models/Transaction'
 export { Account, HDWallet } from './models/Wallet'
-
-export { DoraApiClient } from './DoraApiClient'
+export { Transaction } from './models/Transaction'
 export { MerapiClient } from './MerapiClient'
 export { FeatureFlags } from './models/FeatureFlags'
 

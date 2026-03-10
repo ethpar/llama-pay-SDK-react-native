@@ -1,30 +1,13 @@
 export type Transaction = {
-    hash: string;
-    created_at: string;
+    txHash: string;
     from: string;
     to: string;
-    value: string;
-    is_from: boolean;
-    tokenSymbol: string;
-    tokenAddress?: string;
-};
-export type NativeTransaction = {
-    hash: string;
-    created_at: string;
-    from: string;
-    to: string;
-    value: string;
-    is_from: boolean;
-};
-export type ERC20Transaction = {
-    hash: string;
-    method: string;
-    created_at: string;
-    from: string;
-    to: string;
-    amount: string;
-    is_from: boolean;
+    amount: number;
+    fee: any;
     token: string;
-    contract: string;
+    tokenAmount: number;
+    dateCreated: string;
+    dateConfirmed: string;
+    erc20: boolean;
 };
 //# sourceMappingURL=Transaction.d.ts.map

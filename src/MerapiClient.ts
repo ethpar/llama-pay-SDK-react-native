@@ -10,11 +10,12 @@ import {
     IGeneralMultisigWallet
 } from './models/IMultisigWallet'
 import { ITokenInfo } from './models/ITokenInfo'
-import { ITransaction } from './models/ITransaction'
+import { IMultisigTransaction } from './models/IMultisigTransaction'
 import { IUser } from './models/IUser'
 import ResponseWrapper from './models/ResponseWrapper'
 import { CashoutLimits } from './models/cashout/CashoutLimits'
 import CashoutResponse from './models/cashout/CashoutResponse'
+import { Transaction } from './models/Transaction'
 
 type AuthTokenProvider = () => Promise<string | null>
 
@@ -183,40 +184,42 @@ export class MerapiClient {
         amount: string
         tokenAddress: string | null
         remark: string | null
-    }): Promise<ITransaction> => {
+    }): Promise<IMultisigTransaction> => {
         return this.http
-            .post<ITransaction>('/wallet/tx', params)
+            .post<IMultisigTransaction>('/wallet/tx', params)
             .then((res) => res.data)
     }
 
     getMultisigWalletTransactions = (
         walletId: string
-    ): Promise<ITransaction[]> => {
+    ): Promise<IMultisigTransaction[]> => {
         return this.http
-            .get<ITransaction[]>(`/wallet/wallets/${walletId}/tx`)
+            .get<IMultisigTransaction[]>(`/wallet/wallets/${walletId}/tx`)
             .then((res) => res.data)
     }
 
     getMultisigWalletTransaction = async (
         txId: string
-    ): Promise<ITransaction> => {
+    ): Promise<IMultisigTransaction> => {
         return this.http
-            .get<ITransaction>(`/wallet/tx/${txId}`)
+            .get<IMultisigTransaction>(`/wallet/tx/${txId}`)
             .then((res) => res.data)
     }
 
     addMultisigTxSignature = (
         txId: string,
         data: { txid: string; address: string; signature: string }
-    ): Promise<ITransaction> => {
+    ): Promise<IMultisigTransaction> => {
         return this.http
-            .post<ITransaction>(`/wallet/tx/${txId}/signature`, data)
+            .post<IMultisigTransaction>(`/wallet/tx/${txId}/signature`, data)
             .then((res) => res.data)
     }
 
-    executeTransaction = (txId: string): Promise<ITransaction> => {
+    executeTransaction = (txId: string): Promise<IMultisigTransaction> => {
         return this.http
-            .post<ITransaction>(`/wallet/tx/${txId}/execute`, { txid: txId })
+            .post<IMultisigTransaction>(`/wallet/tx/${txId}/execute`, {
+                txid: txId
+            })
             .then((res) => res.data)
     }
 
@@ -230,9 +233,11 @@ export class MerapiClient {
         return null
     }
 
-    getCCWalletTransactions = (walletId: string): Promise<ITransaction[]> => {
+    getCCWalletTransactions = (
+        walletId: string
+    ): Promise<IMultisigTransaction[]> => {
         return this.http
-            .get<ITransaction[]>(`/wallet/ccwallet/${walletId}/tx`)
+            .get<IMultisigTransaction[]>(`/wallet/ccwallet/${walletId}/tx`)
             .then((res) => res.data)
     }
 
@@ -251,9 +256,9 @@ export class MerapiClient {
         remark?: string
         merchant: string
         confirmations?: number
-    }): Promise<ITransaction> => {
+    }): Promise<IMultisigTransaction> => {
         return this.http
-            .post<ITransaction>('/wallet/tx/pos', params)
+            .post<IMultisigTransaction>('/wallet/tx/pos', params)
             .then((res) => res.data)
     }
 
@@ -276,9 +281,9 @@ export class MerapiClient {
     markTopup = async (
         walletId: string,
         hash: string
-    ): Promise<ITransaction> => {
+    ): Promise<IMultisigTransaction> => {
         return this.http
-            .post<ITransaction>(`/wallet/ccwallet/${walletId}/topup`, {
+            .post<IMultisigTransaction>(`/wallet/ccwallet/${walletId}/topup`, {
                 walletId,
                 hash
             })
@@ -413,6 +418,13 @@ export class MerapiClient {
             '/wallet/service/info'
         )
         return response.data.nodeUrl
+    }
+
+    getTransactions = async (): Promise<Transaction[]> => {
+        const response = await this.http.get<Transaction[]>(
+            '/wallet/transactions'
+        )
+        return response.data
     }
 }
 

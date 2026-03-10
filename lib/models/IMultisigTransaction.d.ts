@@ -1,5 +1,5 @@
 import { SimpleMultisigTransactionData } from './SimpleMultisigTransactionData';
-export interface ITransaction {
+export interface IMultisigTransaction {
     id: string;
     assetType: AssetType;
     asset: TransactionAsset;
@@ -38,4 +38,4 @@ export interface ISignature {
     address: string;
     signature: string;
 }
-//# sourceMappingURL=ITransaction.d.ts.map
+//# sourceMappingURL=IMultisigTransaction.d.ts.map
