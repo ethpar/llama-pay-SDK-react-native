@@ -6,9 +6,10 @@ import { CreateCashoutResponse } from './models/cashout/CreateCashoutResponse';
 import { FeatureFlags } from './models/FeatureFlags';
 import { ICreditCardMultisigWallet, IGeneralMultisigWallet } from './models/IMultisigWallet';
 import { ITokenInfo } from './models/ITokenInfo';
-import { ITransaction } from './models/ITransaction';
+import { IMultisigTransaction } from './models/IMultisigTransaction';
 import { IUser } from './models/IUser';
 import { CashoutLimits } from './models/cashout/CashoutLimits';
+import { Transaction } from './models/Transaction';
 type AuthTokenProvider = () => Promise<string | null>;
 export declare class MerapiClient {
     http: AxiosInstance;
@@ -58,17 +59,17 @@ export declare class MerapiClient {
         amount: string;
         tokenAddress: string | null;
         remark: string | null;
-    }) => Promise<ITransaction>;
-    getMultisigWalletTransactions: (walletId: string) => Promise<ITransaction[]>;
-    getMultisigWalletTransaction: (txId: string) => Promise<ITransaction>;
+    }) => Promise<IMultisigTransaction>;
+    getMultisigWalletTransactions: (walletId: string) => Promise<IMultisigTransaction[]>;
+    getMultisigWalletTransaction: (txId: string) => Promise<IMultisigTransaction>;
     addMultisigTxSignature: (txId: string, data: {
         txid: string;
         address: string;
         signature: string;
-    }) => Promise<ITransaction>;
-    executeTransaction: (txId: string) => Promise<ITransaction>;
+    }) => Promise<IMultisigTransaction>;
+    executeTransaction: (txId: string) => Promise<IMultisigTransaction>;
     getCCWallet: () => Promise<ICreditCardMultisigWallet | null>;
-    getCCWalletTransactions: (walletId: string) => Promise<ITransaction[]>;
+    getCCWalletTransactions: (walletId: string) => Promise<IMultisigTransaction[]>;
     createCCWallet: (params: {
         pan: string;
     }) => Promise<ICreditCardMultisigWallet>;
@@ -79,10 +80,10 @@ export declare class MerapiClient {
         remark?: string;
         merchant: string;
         confirmations?: number;
-    }) => Promise<ITransaction>;
+    }) => Promise<IMultisigTransaction>;
     getTokenInfo: (tokenAddress: string) => Promise<ITokenInfo | null>;
     getFeatureFlags: () => Promise<FeatureFlags>;
-    markTopup: (walletId: string, hash: string) => Promise<ITransaction>;
+    markTopup: (walletId: string, hash: string) => Promise<IMultisigTransaction>;
     getCashoutLimits: () => Promise<CashoutLimits>;
     getAtmList: () => Promise<Atm[]>;
     sendVerificationWord: (params: {
@@ -107,6 +108,7 @@ export declare class MerapiClient {
         hash: string;
     }>;
     getRpcUrl: () => Promise<string>;
+    getTransactions: () => Promise<Transaction[]>;
 }
 export {};
 //# sourceMappingURL=MerapiClient.d.ts.map
