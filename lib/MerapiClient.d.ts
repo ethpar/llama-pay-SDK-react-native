@@ -102,6 +102,7 @@ export declare class MerapiClient {
         cardhash: string;
     }) => Promise<void>;
     getAddressByCardHash: (cardhash: string) => Promise<string | undefined>;
+    getLinkedCardsCount: () => Promise<number>;
     submitTransaction: (params: {
         transaction: string;
     }) => Promise<{

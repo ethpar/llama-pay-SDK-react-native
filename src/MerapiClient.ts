@@ -401,6 +401,13 @@ export class MerapiClient {
         return response.data.data.items[0]?.address
     }
 
+    getLinkedCardsCount = async (): Promise<number> => {
+        const response = await this.http.post<
+            ResponseWrapper<{ items: [{ linked_cards_count: number }] }>
+        >('/cashout/card/link/count')
+        return response.data.data.items[0].linked_cards_count
+    }
+
     submitTransaction = async (params: {
         transaction: string
     }): Promise<{
