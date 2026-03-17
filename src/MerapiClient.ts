@@ -16,6 +16,8 @@ import ResponseWrapper from './models/ResponseWrapper'
 import { CashoutLimits } from './models/cashout/CashoutLimits'
 import CashoutResponse from './models/cashout/CashoutResponse'
 import { Transaction } from './models/Transaction'
+import { LinkedCard } from './models/LinkedCard'
+import { WalletAccount } from './models/WalletAccount'
 
 type AuthTokenProvider = () => Promise<string | null>
 
@@ -292,9 +294,9 @@ export class MerapiClient {
 
     // cashout
 
-    getCashoutLimits = async (): Promise<CashoutLimits> => {
+    getCashoutLimits = async (atmId: string): Promise<CashoutLimits> => {
         return this.http
-            .get<CashoutLimits>('/cashout/limits')
+            .get<CashoutLimits>(`/cashout/limits?atm_id=${atmId}`)
             .then((res) => res.data)
     }
 
@@ -385,6 +387,7 @@ export class MerapiClient {
     linkCardToAddress = async (params: {
         address: string
         cardhash: string
+        lastDigits: string
     }): Promise<void> => {
         await this.http.post<ResponseWrapper<{ items: [{}] }>>(
             '/cashout/card/link',
@@ -406,6 +409,23 @@ export class MerapiClient {
             ResponseWrapper<{ items: [{ linked_cards_count: number }] }>
         >('/cashout/card/link/count')
         return response.data.data.items[0].linked_cards_count
+    }
+
+    getLinkedCards = async (): Promise<LinkedCard[]> => {
+        const response = await this.http.get<
+            ResponseWrapper<{
+                items: {
+                    last_digits: string | null
+                    address: string
+                }[]
+            }>
+        >('/cashout/card/links')
+        return response.data.data.items.map((item) => {
+            return {
+                address: item.address,
+                lastDigits: item.last_digits
+            }
+        })
     }
 
     submitTransaction = async (params: {
@@ -432,6 +452,59 @@ export class MerapiClient {
             '/wallet/transactions'
         )
         return response.data
+    }
+
+    // wallet accounts
+
+    createAccount = async (params: {
+        address: string
+        index: number
+        label?: string
+    }): Promise<void> => {
+        await this.http.post('/wallet/account', {
+            address: params.address,
+            account_index: params.index,
+            optional_account_label: params.label
+        })
+    }
+
+    deleteAccount = async (params: { accountIndex: number }): Promise<void> => {
+        await this.http.delete('/wallet/account', {
+            data: { account_index: params.accountIndex }
+        })
+    }
+
+    setAccountLabel = async (params: {
+        accountIndex: string
+        label: string
+    }): Promise<void> => {
+        await this.http.post('/wallet/account/label', {
+            account_index: params.accountIndex,
+            account_label: params.label
+        })
+    }
+
+    getAccounts = async (): Promise<WalletAccount[]> => {
+        const response = await this.http.get<
+            ResponseWrapper<{
+                items: {
+                    account_index: 0
+                    account_label: string
+                    address: string
+                    created_at: string
+                    updated_at: string | null
+                }[]
+            }>
+        >('/wallet/accounts')
+        return response.data.data.items.map((item) => {
+            return {
+                index: item.account_index,
+                address: item.address,
+                label: item.account_label,
+                createdAt: item.created_at,
+                updatedAt: item.updated_at
+            }
+        })
     }
 }
 
