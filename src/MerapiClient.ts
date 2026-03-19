@@ -388,10 +388,16 @@ export class MerapiClient {
         address: string
         cardhash: string
         lastDigits: string
+        firstDigit: string
     }): Promise<void> => {
         await this.http.post<ResponseWrapper<{ items: [{}] }>>(
             '/cashout/card/link',
-            params
+            {
+             address: params.address,
+             cardhash: params.cardhash,
+             last_digits: params.lastDigits,
+             first_digit: params.firstDigit
+            }
         )
     }
 
@@ -416,14 +422,16 @@ export class MerapiClient {
             ResponseWrapper<{
                 items: {
                     last_digits: string | null
-                    address: string
+                    address: string,
+                    first_digit: string | null
                 }[]
             }>
         >('/cashout/card/links')
         return response.data.data.items.map((item) => {
             return {
                 address: item.address,
-                lastDigits: item.last_digits
+                lastDigits: item.last_digits,
+                firstDigit: item.first_digit
             }
         })
     }
