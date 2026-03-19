@@ -19,6 +19,7 @@ export { IUser } from './models/IUser'
 export { SimpleMultisigTransactionData } from './models/SimpleMultisigTransactionData'
 export { Account, HDWallet } from './models/Wallet'
 export { Transaction } from './models/Transaction'
+export { WalletAccount } from './models/WalletAccount'
 export { MerapiClient } from './MerapiClient'
 export { FeatureFlags } from './models/FeatureFlags'
 

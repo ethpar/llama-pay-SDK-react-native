@@ -4,7 +4,7 @@ export interface CashoutLimits {
     maxAmountVerified: number
     yearSummaryAmount: number
     yearSummaryAmountVerified: number
-    feeAmount: number
     yearRemainAmount: number
+    feeAmount: number
     verified: boolean
 }
