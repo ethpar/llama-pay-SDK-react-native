@@ -417,11 +417,18 @@ export class MerapiClient {
         return response.data.data.items[0].linked_cards_count
     }
 
+    unlinkCard = async (params: { cardHash: string }): Promise<void> => {
+        await this.http.delete('/cashout/card', {
+            data: { cardhash: params.cardHash }
+        })
+    }
+
     getLinkedCards = async (): Promise<LinkedCard[]> => {
         const response = await this.http.get<
             ResponseWrapper<{
                 items: {
                     last_digits: string | null
+                    card_hash: string
                     address: string,
                     first_digit: string | null
                 }[]
@@ -430,6 +437,7 @@ export class MerapiClient {
         return response.data.data.items.map((item) => {
             return {
                 address: item.address,
+                cardHash: item.card_hash,
                 lastDigits: item.last_digits,
                 firstDigit: item.first_digit
             }
