@@ -457,7 +457,7 @@ export class MerapiClient {
     }
 
     getRpcUrl = async (): Promise<string> => {
-        const response = await this.http.post<{ nodeUrl: string }>(
+        const response = await this.http.get<{ nodeUrl: string }>(
             '/wallet/service/info'
         )
         return response.data.nodeUrl
