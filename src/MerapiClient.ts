@@ -253,9 +253,11 @@ export class MerapiClient {
 
     executePosTransaction = (params: {
         destination: string
+        tokenAddress?: string
+        assetType: 'native' | 'erc20'
         panHash: string
         amount: string
-        remark?: string
+        remark: string
         merchant: string
         confirmations?: number
     }): Promise<IMultisigTransaction> => {
