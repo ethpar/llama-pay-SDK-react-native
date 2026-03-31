@@ -253,9 +253,11 @@ export class MerapiClient {
 
     executePosTransaction = (params: {
         destination: string
+        tokenAddress?: string
+        assetType: 'native' | 'erc20'
         panHash: string
         amount: string
-        remark?: string
+        remark: string
         merchant: string
         confirmations?: number
     }): Promise<IMultisigTransaction> => {
@@ -457,7 +459,7 @@ export class MerapiClient {
     }
 
     getRpcUrl = async (): Promise<string> => {
-        const response = await this.http.post<{ nodeUrl: string }>(
+        const response = await this.http.get<{ nodeUrl: string }>(
             '/wallet/service/info'
         )
         return response.data.nodeUrl
