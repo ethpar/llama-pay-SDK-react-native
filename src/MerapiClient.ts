@@ -18,6 +18,7 @@ import CashoutResponse from './models/cashout/CashoutResponse'
 import { Transaction } from './models/Transaction'
 import { LinkedCard } from './models/LinkedCard'
 import { WalletAccount } from './models/WalletAccount'
+import { MerchantLimit } from './models/MerchantLimit'
 
 type AuthTokenProvider = () => Promise<string | null>
 
@@ -500,10 +501,39 @@ export class MerapiClient {
         await this.http.post(`/wallet/account/${id}/deactivate`)
     }
 
-    getAccounts = async (): Promise<WalletAccount[]> => {
-        const response =
-            await this.http.get<WalletAccount[]>('/wallet/accounts')
+    getAccounts = async (options?: {
+        includeDisabled?: boolean
+    }): Promise<WalletAccount[]> => {
+        const query = `active_only=${!options?.includeDisabled}`
+        const response = await this.http.get<WalletAccount[]>(
+            `/wallet/accounts?${query}`
+        )
         return response.data
+    }
+
+    // merchant
+
+    getAllLimits = async (): Promise<MerchantLimit[]> => {
+        const response = await this.http.get<MerchantLimit[]>(
+            `/wallet/merchant/limits`
+        )
+        return response.data
+    }
+
+    getMerchantLimit = async (
+        merchantId: string
+    ): Promise<MerchantLimit | null> => {
+        const response = await this.http.get<MerchantLimit>(
+            `/wallet/merchant/${merchantId}/limits`
+        )
+        return response.data || null
+    }
+
+    setMerchantLimit = async (
+        merchantId: string,
+        limits: Omit<MerchantLimit, 'merchantId' | 'merchant'>
+    ): Promise<void> => {
+        await this.http.post(`/wallet/merchant/${merchantId}/limits`, limits)
     }
 }
 
