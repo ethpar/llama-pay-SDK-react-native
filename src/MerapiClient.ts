@@ -18,6 +18,7 @@ import CashoutResponse from './models/cashout/CashoutResponse'
 import { Transaction } from './models/Transaction'
 import { LinkedCard } from './models/LinkedCard'
 import { WalletAccount } from './models/WalletAccount'
+import { MerchantLimit } from './models/MerchantLimit'
 
 type AuthTokenProvider = () => Promise<string | null>
 
@@ -395,10 +396,10 @@ export class MerapiClient {
         await this.http.post<ResponseWrapper<{ items: [{}] }>>(
             '/cashout/card/link',
             {
-             address: params.address,
-             cardhash: params.cardhash,
-             last_digits: params.lastDigits,
-             first_digit: params.firstDigit
+                address: params.address,
+                cardhash: params.cardhash,
+                last_digits: params.lastDigits,
+                first_digit: params.firstDigit
             }
         )
     }
@@ -431,7 +432,7 @@ export class MerapiClient {
                 items: {
                     last_digits: string | null
                     card_hash: string
-                    address: string,
+                    address: string
                     first_digit: string | null
                 }[]
             }>
@@ -474,55 +475,65 @@ export class MerapiClient {
 
     // wallet accounts
 
-    createAccount = async (params: {
-        address: string
-        index: number
-        label?: string
+    registerXpub = async (params: {
+        xpub: string
+        baseDerivationPath: string
+        masterFingerprint: string
     }): Promise<void> => {
-        await this.http.post('/wallet/account', {
-            address: params.address,
-            account_index: params.index,
-            optional_account_label: params.label
+        await this.http.post('/wallet/register', params)
+    }
+
+    createAccount = async (params: { name: string }): Promise<void> => {
+        await this.http.post('/wallet/account', { name: params.name })
+    }
+
+    updateAccountLabel = async (id: string, label: string): Promise<void> => {
+        await this.http.post(`/wallet/account/${id}`, {
+            account_label: label
         })
     }
 
-    deleteAccount = async (params: { accountIndex: number }): Promise<void> => {
-        await this.http.delete('/wallet/account', {
-            data: { account_index: params.accountIndex }
-        })
+    activateAccount = async (id: string): Promise<void> => {
+        await this.http.post(`/wallet/account/${id}/activate`)
     }
 
-    setAccountLabel = async (params: {
-        accountIndex: string
-        label: string
-    }): Promise<void> => {
-        await this.http.post('/wallet/account/label', {
-            account_index: params.accountIndex,
-            account_label: params.label
-        })
+    deactivateAccount = async (id: string): Promise<void> => {
+        await this.http.post(`/wallet/account/${id}/deactivate`)
     }
 
-    getAccounts = async (): Promise<WalletAccount[]> => {
-        const response = await this.http.get<
-            ResponseWrapper<{
-                items: {
-                    account_index: 0
-                    account_label: string
-                    address: string
-                    created_at: string
-                    updated_at: string | null
-                }[]
-            }>
-        >('/wallet/accounts')
-        return response.data.data.items.map((item) => {
-            return {
-                index: item.account_index,
-                address: item.address,
-                label: item.account_label,
-                createdAt: item.created_at,
-                updatedAt: item.updated_at
-            }
-        })
+    getAccounts = async (options?: {
+        includeDisabled?: boolean
+    }): Promise<WalletAccount[]> => {
+        const query = `active_only=${!options?.includeDisabled}`
+        const response = await this.http.get<WalletAccount[]>(
+            `/wallet/accounts?${query}`
+        )
+        return response.data
+    }
+
+    // merchant
+
+    getAllLimits = async (): Promise<MerchantLimit[]> => {
+        const response = await this.http.get<MerchantLimit[]>(
+            `/wallet/merchant/limits`
+        )
+        return response.data
+    }
+
+    getMerchantLimit = async (
+        merchantId: string
+    ): Promise<MerchantLimit | null> => {
+        const response = await this.http.get<MerchantLimit>(
+            `/wallet/merchant/${merchantId}/limits`
+        )
+        return response.data || null
+    }
+
+    setMerchantLimit = async (
+        merchantId: string,
+        limits: Omit<MerchantLimit, 'merchantId' | 'merchant'>
+    ): Promise<void> => {
+        await this.http.post(`/wallet/merchant/${merchantId}/limits`, limits)
     }
 }
 
