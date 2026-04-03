@@ -7,6 +7,9 @@
   "browser": {
     "./lib/device-info.js": "./lib/device-info.web.js"
   },
+  "react-native": {
+    "./lib/device-info.js": "./lib/device-info.js"
+  },
   "exports": {
     ".": {
       "require": "./lib/index.js",
