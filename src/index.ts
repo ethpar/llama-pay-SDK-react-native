@@ -30,4 +30,13 @@ export { Atm } from './models/cashout/Atm'
 export { CashoutStatus } from './models/cashout/CashoutStatus'
 export { CashoutRequest } from './models/cashout/CashoutRequest'
 export { CreateCashoutResponse } from './models/cashout/CreateCashoutResponse'
+<<<<<<< Updated upstream
 export * as crypto from './crypto'
+=======
+
+// crypto
+export * as crypto from './crypto'
+
+// Atm
+export { AtmClient } from './atm/AtmClient'
+>>>>>>> Stashed changes
