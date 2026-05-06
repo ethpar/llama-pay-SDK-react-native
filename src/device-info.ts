@@ -1,24 +1,3 @@
-<<<<<<< Updated upstream
-import DeviceInfo from 'react-native-device-info'
-
-export type Platform = 'web' | 'react-native' | 'unknown'
-
-function detectPlatform(): Platform {
-    if (typeof window !== 'undefined' && typeof document !== 'undefined') {
-        return 'web'
-    }
-    if (
-        typeof navigator !== 'undefined' &&
-        navigator.product === 'ReactNative'
-    ) {
-        return 'react-native'
-    }
-
-    return 'unknown'
-}
-
-=======
->>>>>>> Stashed changes
 export async function getUserAgent() {
     if (typeof navigator !== 'undefined' && navigator.userAgent) {
         return navigator.userAgent
@@ -32,18 +11,6 @@ export async function getUserAgent() {
 }
 
 export async function getBundleId() {
-<<<<<<< Updated upstream
-    const platform = detectPlatform()
-
-    switch (platform) {
-        case 'web':
-            return location.origin
-        case 'react-native':
-            return DeviceInfo.getBundleId()
-        default:
-            return 'Unknown'
-    }
-=======
     if (typeof require !== 'undefined') {
         try {
             const Constants = require('expo-constants').default
@@ -72,5 +39,4 @@ export async function getBundleId() {
     }
 
     return null
->>>>>>> Stashed changes
 }
