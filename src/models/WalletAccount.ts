@@ -1,7 +1,9 @@
 export interface WalletAccount {
-    index: 0
-    label: string
+    id: number
+    name: string
     address: string
-    createdAt: string
-    updatedAt: string | null
+    derivationPath: string
+    accountIndex: number
+    parentFingerprint: string
+    active: boolean
 }

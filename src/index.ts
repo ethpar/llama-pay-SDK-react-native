@@ -23,6 +23,7 @@ export { WalletAccount } from './models/WalletAccount'
 export { MerapiClient } from './MerapiClient'
 export { FeatureFlags } from './models/FeatureFlags'
 export { LinkedCard } from './models/LinkedCard'
+export { MerchantLimit } from './models/MerchantLimit'
 
 // cashout
 export { CashoutClient } from './CashoutClient'
