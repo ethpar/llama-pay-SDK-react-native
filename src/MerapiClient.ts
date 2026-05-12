@@ -1,5 +1,5 @@
 import axios, { AxiosInstance, AxiosResponse } from 'axios'
-import { getBundleId, getDeviceId, getUserAgent } from './device-info'
+import { getBundleId, getUserAgent } from './device-info'
 import { BalanceResponse } from './models/Balance'
 import { Atm } from './models/cashout/Atm'
 import { CashoutRequest } from './models/cashout/CashoutRequest'
@@ -45,7 +45,8 @@ export class MerapiClient {
 
     authTokenProvider?: AuthTokenProvider
 
-    constructor(params: { baseUrl: string; clientId: string }) {
+    constructor(params: { baseUrl: string; clientId: string, deviceId: string }) {
+        this.deviceId = params.deviceId;
         this.http = axios.create({
             baseURL: params.baseUrl,
             timeout: 30 * 1000,
@@ -61,7 +62,6 @@ export class MerapiClient {
             async (config) => {
                 config.headers = config.headers ?? {}
 
-                if (!this.deviceId) this.deviceId = await getDeviceId()
                 if (!this.userAgent) this.userAgent = await getUserAgent()
                 if (!this.bundleId) this.bundleId = await getBundleId()
 
@@ -331,14 +331,9 @@ export class MerapiClient {
     }
 
     createCashoutRequest = async (params: {
-        atmId: string
-        amount: string
+        atmId: number
+        amount: number
     }): Promise<CreateCashoutResponse> => {
-        const data = new URLSearchParams()
-        data.append('atm_id', params.atmId)
-        data.append('amount', params.amount)
-        data.append('_t', new Date().getTime().toString())
-
         const response = await this.http.post<
             ResponseWrapper<{
                 items: [
@@ -346,15 +341,14 @@ export class MerapiClient {
                         secure_code: string
                         address: string
                         usd_amount: number
-                        btc_amount: number
+                        psc_amount: number
                         btc_whole_unit_price: number
                     }
                 ]
             }>
-        >('/cashout/pcode', data, {
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            }
+        >('/cashout/pcode', {
+            atm_id: params.atmId,
+            amount: params.amount
         })
         const result = response.data.data.items[0]
 
@@ -362,7 +356,7 @@ export class MerapiClient {
             secureCode: result.secure_code,
             address: result.address,
             usdAmount: result.usd_amount,
-            btcAmount: result.btc_amount,
+            pscAmount: result.psc_amount,
             btcWholeUnitPrice: result.btc_whole_unit_price
         }
     }

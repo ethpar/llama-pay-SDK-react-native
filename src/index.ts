@@ -31,4 +31,9 @@ export { Atm } from './models/cashout/Atm'
 export { CashoutStatus } from './models/cashout/CashoutStatus'
 export { CashoutRequest } from './models/cashout/CashoutRequest'
 export { CreateCashoutResponse } from './models/cashout/CreateCashoutResponse'
+
+// crypto
 export * as crypto from './crypto'
+
+// Atm
+export { AtmClient } from './atm/AtmClient'

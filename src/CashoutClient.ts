@@ -92,7 +92,7 @@ export class CashoutClient {
                         secure_code: string
                         address: string
                         usd_amount: number
-                        btc_amount: number
+                        psc_amount: number
                         btc_whole_unit_price: number
                     }
                 ]
@@ -108,7 +108,7 @@ export class CashoutClient {
             secureCode: result.secure_code,
             address: result.address,
             usdAmount: result.usd_amount,
-            btcAmount: result.btc_amount,
+            pscAmount: result.psc_amount,
             btcWholeUnitPrice: result.btc_whole_unit_price
         }
     }
