@@ -35,3 +35,38 @@ export type LoginParams = {
 };
 
 export type LoginResponse = ResponseWrapper<{ sessionKey: string }>;
+
+export interface CoinResponseRaw {
+    price: number;
+    quantity: number;
+    wholeUnitPrice: number;
+    publicKey: string;
+    privateKey: string;
+    min_amount: number,
+    customer_publicKey: string | null;
+    fees: number
+    }
+
+export interface CoinResponse {
+    price: number;
+    quantity: number;
+    wholeUnitPrice: number;
+    publicKey: string;
+    privateKey: string;
+    minAmount: number;
+    customerPublicKey: string | null;
+    fees: number;
+}
+export interface CoinsPurchaseParams {
+    terminalId: string;
+    amount: number;
+    cardHash: string;
+    coin: string;
+}
+
+export interface CoinsPurchaseCommitParams {
+    terminalId: string;
+    publicKey: string;
+    cardHash: string;
+    coin: string;
+}

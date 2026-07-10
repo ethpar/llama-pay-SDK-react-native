@@ -6,15 +6,19 @@ import {
     GetCashReponse,
     BuyCoinParams,
     BuyCoinResponse,
+    CoinResponse,
+    CoinsPurchaseParams,
+    CoinsPurchaseCommitParams,
+    CoinResponseRaw
 } from "./types";
 
 export class AtmClient {
     http: AxiosInstance;
 
-    constructor(params: { baseUrl: string }) {
+    constructor(params: { baseUrl?: string }) {
         this.http = axios.create({
-            baseURL: params.baseUrl,
-            timeout: 30 * 1000,
+            baseURL: params.baseUrl || "https://genmega.rampatm.net/atm",
+            timeout: 2 * 60 * 1000,
             headers: {
                 "Content-Type": "application/json",
                 Accept: "application/json",
@@ -66,6 +70,44 @@ export class AtmClient {
     buyToken = async (params: BuyCoinParams) => {
         return this.http
             .post<BuyCoinResponse>("/atm/eth/coins/gift", params)
+            .then((res) => res.data.data.items[0]);
+    };
+
+    coinsPurchase = async (
+        params: CoinsPurchaseParams
+    ): Promise<CoinResponse> => {
+        const res = await this.http
+            .post<{ data: { items: CoinResponseRaw[] } }>("/atm/eth/coins/purchase", {
+                terminal_id: params.terminalId,
+                amount: params.amount,
+                encrypted_card_hash: params.cardHash,
+                coin: params.coin
+            })
+            .then((res) => res.data.data.items[0]);
+        return {
+            customerPublicKey: res.customer_publicKey,
+            fees: res.fees,
+            minAmount: res.min_amount,
+            price: res.price,
+            privateKey: res.privateKey,
+            publicKey: res.publicKey,
+            quantity: res.quantity,
+            wholeUnitPrice: res.wholeUnitPrice
+        }
+    };
+
+    coinsPurchaseCommit = async (
+        commit: boolean,
+        params: CoinsPurchaseCommitParams
+    ): Promise<CoinResponse> => {
+        return this.http
+            .post<{ data: { items: CoinResponse[] } }>("/atm/eth/coins/commit", {
+                terminal_id: params.terminalId,
+                public_key: params.publicKey,
+                is_commit: commit ? 1 : 0,
+                encrypted_card_hash: params.cardHash,
+                coin: params.coin
+            })
             .then((res) => res.data.data.items[0]);
     };
 }
