@@ -36,4 +36,4 @@ export { CreateCashoutResponse } from './models/cashout/CreateCashoutResponse'
 export * as crypto from './crypto'
 
 // Atm
-export { AtmClient } from './atm/AtmClient'
+export * from './atm'

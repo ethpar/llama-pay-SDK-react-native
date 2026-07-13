@@ -24,6 +24,11 @@
       "require": "./lib/device-info.js",
       "import": "./lib/device-info.js",
       "types": "./lib/device-info.d.ts"
+    },
+    "./atm": {
+      "require": "./lib/atm/index.js",
+      "import": "./lib/atm/index.js",
+      "types": "./lib/atm/index.d.ts"
     }
   },
   "files": [
