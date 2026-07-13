@@ -57,6 +57,12 @@ export interface CoinResponse {
     customerPublicKey: string | null;
     fees: number;
 }
+
+export interface CoinCommitResponse {
+    quantity: number;
+    publicKey: string;
+}
+
 export interface CoinsPurchaseParams {
     terminalId: string;
     amount: number;

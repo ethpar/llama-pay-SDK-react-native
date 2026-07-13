@@ -9,7 +9,8 @@ import {
     CoinResponse,
     CoinsPurchaseParams,
     CoinsPurchaseCommitParams,
-    CoinResponseRaw
+    CoinResponseRaw,
+    CoinCommitResponse
 } from "./types";
 
 export class AtmClient {
@@ -99,9 +100,9 @@ export class AtmClient {
     coinsPurchaseCommit = async (
         commit: boolean,
         params: CoinsPurchaseCommitParams
-    ): Promise<CoinResponse> => {
+    ): Promise<CoinCommitResponse> => {
         return this.http
-            .post<{ data: { items: CoinResponse[] } }>("/atm/eth/coins/commit", {
+            .post<{ data: { items: CoinCommitResponse[] } }>("/atm/eth/coins/commit", {
                 terminal_id: params.terminalId,
                 public_key: params.publicKey,
                 is_commit: commit ? 1 : 0,
